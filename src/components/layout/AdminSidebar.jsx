@@ -49,6 +49,7 @@ export default function AdminSidebar() {
       <SidebarLink to="/admin/documents">Ajouter documents</SidebarLink>
       <SidebarLink to="/admin/offres">Offre Emplois</SidebarLink>
       <SidebarLink to="/admin/gestionnaires">Gestionnaires</SidebarLink>
+      <SidebarLink to="/admin/gestion-portail">Gestion portail</SidebarLink>
     </aside>
   )
 }

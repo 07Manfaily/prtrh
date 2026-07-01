@@ -14,6 +14,7 @@ import OffreEmplois from './admin/pages/OffreEmplois'
 import CreerOffre from './admin/pages/CreerOffre'
 import DetailOffre from './admin/pages/DetailOffre'
 import Gestionnaires from './admin/pages/Gestionnaires'
+import GestionPortail from './admin/pages/GestionPortail'
 import SalarieLayout from './salarie/SalarieLayout'
 import EspaceSalarie from './salarie/pages/EspaceSalarie'
 import FormationCarriere from './salarie/pages/FormationCarriere'
@@ -55,6 +56,7 @@ function App() {
             <Route path="offres/creer" element={<CreerOffre />} />
             <Route path="offres/:id" element={<DetailOffre />} />
             <Route path="gestionnaires" element={<Gestionnaires />} />
+            <Route path="gestion-portail" element={<GestionPortail />} />
           </Route>
         </Route>
       </Routes>
