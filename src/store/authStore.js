@@ -11,49 +11,35 @@ export const useAuthStore = create(
       error:   null,
 
       /**
-       * Connexion.
-       * Gère deux cas selon le backend :
-       *  - réponse { token, user }  → stocke directement
-       *  - réponse { token } seul   → appelle /auth/me ensuite
+       * MODE DEV — login mock (pas d'appel API).
+       * Pour réactiver le vrai login, remplacer ce bloc par :
+       *
+       * login: async (credentials) => {
+       *   set({ loading: true, error: null })
+       *   try {
+       *     const response = await authService.login(credentials)
+       *     set({ token: response.token })
+       *     if (response.user) set({ user: response.user, loading: false })
+       *     else { await get().fetchMe(); set({ loading: false }) }
+       *   } catch (err) {
+       *     set({ error: err.message, loading: false })
+       *     throw err
+       *   }
+       * },
        */
-      login: async (credentials) => {
-        set({ loading: true, error: null })
-        try {
-          const response = await authService.login(credentials)
-          set({ token: response.token })
-
-          if (response.user) {
-            set({ user: response.user, loading: false })
-          } else {
-            // Backend n'a renvoyé que le token → on charge le profil
-            await get().fetchMe()
-            set({ loading: false })
-          }
-        } catch (err) {
-          set({ error: err.message, loading: false })
-          throw err
-        }
+      login: async () => {
+        set({
+          token: 'mock-token',
+          user:  { prenom: 'Lambertin', nom: 'Isidorin', role: 'salarie' },
+          loading: false,
+          error:   null,
+        })
       },
 
-      /**
-       * Charge / rafraîchit le profil depuis /auth/me.
-       * Appelé :
-       *  - juste après login (si le backend ne retourne pas user)
-       *  - au démarrage de l'app quand un token est déjà persisté
-       */
-      fetchMe: async () => {
-        if (!get().token) return
-        try {
-          const user = await authService.me()
-          set({ user })
-        } catch {
-          // Token expiré ou invalide → on déconnecte
-          set({ user: null, token: null })
-        }
-      },
+      /** MODE DEV — no-op (pas d'API disponible). */
+      fetchMe: async () => {},
 
       logout: async () => {
-        try { await authService.logout() } catch {}
         set({ user: null, token: null })
       },
 

@@ -21,12 +21,10 @@ import FormationCarriere from './salarie/pages/FormationCarriere'
 import ContactezRH from './salarie/pages/ContactezRH'
 
 function App() {
-  const { token, user, fetchMe } = useAuthStore()
-
-  // Refresh de page : token persisté mais user non chargé → revalide le token
-  useEffect(() => {
-    if (token && !user) fetchMe()
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  // MODE DEV — fetchMe désactivé (pas d'API).
+  // Pour réactiver :
+  // const { token, user, fetchMe } = useAuthStore()
+  // useEffect(() => { if (token && !user) fetchMe() }, [])
 
   return (
     <BrowserRouter>
