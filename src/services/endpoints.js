@@ -32,6 +32,19 @@ export const ENDPOINTS = {
     offre:             (id) => `/salarie/offres/${id}`,
   },
 
+  // Portail Home — POST/GET /api/v1/home
+  // (VITE_API_URL doit pointer sur http://localhost:3000, pas .../api)
+  home: {
+    get:    '/api/v1/home',
+    update: '/api/v1/home',
+  },
+
+  // Evènements — POST /events
+  events: {
+    create: '/events',
+    list:   '/events',
+  },
+
   admin: {
     // Dashboard
     stats:    '/admin/stats',

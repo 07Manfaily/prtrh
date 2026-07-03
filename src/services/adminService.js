@@ -30,4 +30,16 @@ export const adminService = {
   getGestionnaires:      ()     => api.get(EP.admin.gestionnaires),
   ajouterGestionnaire:   (data) => api.post(EP.admin.gestionnaires,        data),
   supprimerGestionnaire: (id)   => api.delete(EP.admin.gestionnaire(id)),
+
+  // Portail Home config (FormData — banner/images sont des fichiers)
+  getHome:    ()     => api.get(EP.home.get),
+  updateHome: (data) => api.post(EP.home.update, data, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  }),
+
+  // Evènements (FormData — cover_image est un fichier)
+  creerEvenement: (data) => api.post(EP.events.create, data, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  }),
+  getEvenements: () => api.get(EP.events.list),
 }
