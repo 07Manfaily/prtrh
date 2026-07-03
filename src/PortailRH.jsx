@@ -184,7 +184,7 @@ export default function PortailRH() {
     <div className="font-sans antialiased text-neutral-800" style={{ background: "#fff" }}>
       {/* ============================= HEADER ============================ */}
       <header className="sticky top-0 z-50 border-b border-neutral-100 bg-white/90 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3">
+        <div className="mx-auto flex max-w-[1600px] items-center justify-between px-5 py-3">
           <button onClick={() => scrollTo("accueil")}>
             <Logo />
           </button>
@@ -244,7 +244,7 @@ export default function PortailRH() {
       {/* ============================= HERO ============================= */}
       <section id="accueil" className="relative overflow-hidden" style={{ background: DARK }}>
         <div className="flex min-h-[320px] items-stretch">
-          <div className="flex flex-1 items-center px-[max(1.25rem,calc(50vw-38rem))] py-16">
+          <div className="flex flex-1 items-center px-[max(1.25rem,calc(50vw-50rem))] py-16">
             <div>
               <h1 className="text-4xl font-bold leading-tight text-white md:text-5xl">
                 Bienvenue sur votre{" "}
@@ -263,7 +263,7 @@ export default function PortailRH() {
 
       {/* ---------- Flash info ---------- */}
       <div style={{ background: "#FBE0E2" }}>
-        <div className="mx-auto flex max-w-6xl flex-wrap items-baseline gap-3 px-5 py-4">
+        <div className="mx-auto flex max-w-[1600px] flex-wrap items-baseline gap-3 px-5 py-4">
           <span className="text-xl font-bold md:text-2xl" style={{ color: RED }}>
             Flash Info :
           </span>
@@ -274,7 +274,7 @@ export default function PortailRH() {
       </div>
 
       {/* ============================= MOT DE LA RH ===================== */}
-      <section id="mot-rh" className="mx-auto max-w-6xl px-5 py-20">
+      <section id="mot-rh" className="mx-auto max-w-[1600px] px-5 py-20">
         <Title>Mot de bienvenue RH</Title>
         <div className="grid items-center gap-8 md:grid-cols-2">
           <div className="rounded-xl bg-neutral-50 p-7 text-sm leading-relaxed text-neutral-600">
@@ -290,7 +290,7 @@ export default function PortailRH() {
 
       {/* ============================= ESPACE SALARIÉ =================== */}
       <section id="espace" style={{ background: GRAY }}>
-        <div className="mx-auto grid max-w-6xl items-center gap-8 px-5 py-16 md:grid-cols-[320px_1fr]">
+        <div className="mx-auto grid max-w-[1600px] items-center gap-8 px-5 py-16 md:grid-cols-[320px_1fr]">
           <div className="flex justify-center">
             <img
               src={IMG.womanPro}
@@ -324,7 +324,7 @@ export default function PortailRH() {
       </section>
 
       {/* ============================= DOCUMENTS RÉGLEMENTAIRES ========= */}
-      <section id="documents" className="mx-auto max-w-6xl px-5 py-20">
+      <section id="documents" className="mx-auto max-w-[1600px] px-5 py-20">
         <Title>Documents réglementaires</Title>
 
         <div className="mb-6 grid gap-5 md:grid-cols-3">
@@ -384,7 +384,7 @@ export default function PortailRH() {
       </section>
 
       {/* ============================= CARRIÈRE ========================= */}
-      <section id="carriere" className="mx-auto max-w-6xl px-5 py-16">
+      <section id="carriere" className="mx-auto max-w-[1600px] px-5 py-16">
         <div className="flex items-start justify-between">
           <Title>Emplois - Formation - Mobilité</Title>
           <button className="hidden items-center gap-1 text-sm font-medium text-neutral-800 hover:opacity-70 sm:flex">
@@ -441,7 +441,7 @@ export default function PortailRH() {
 
       {/* ============================= EVÈNEMENTS ======================= */}
       <section id="evenements" style={{ background: GRAY }}>
-        <div className="mx-auto max-w-6xl px-5 py-16">
+        <div className="mx-auto max-w-[1600px] px-5 py-16">
           <div className="flex items-start justify-between">
             <Title>Evènements à venir</Title>
             <button className="flex items-center gap-1 text-sm font-medium text-neutral-800 hover:opacity-70">
@@ -478,7 +478,7 @@ export default function PortailRH() {
 
       {/* ============================= ACTUALITÉS ======================= */}
       <section id="actualites" style={{ background: DARK }}>
-        <div className="mx-auto max-w-6xl px-5 py-20">
+        <div className="mx-auto max-w-[1600px] px-5 py-20">
           <div className="flex items-start justify-between">
             <Title light>Actualités</Title>
             <button className="flex items-center gap-1 text-sm font-medium text-white hover:opacity-80">
@@ -519,7 +519,7 @@ export default function PortailRH() {
       <footer>
         {/* bandeau contact */}
         <div style={{ background: DARK }}>
-          <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-5 py-8">
+          <div className="mx-auto flex max-w-[1600px] flex-wrap items-center justify-between gap-4 px-5 py-8">
             <div className="flex items-center gap-4">
               <Phone size={36} style={{ color: RED }} />
               <div className="text-white">
@@ -535,7 +535,7 @@ export default function PortailRH() {
 
         {/* bandeau rouge */}
         <div style={{ background: RED }}>
-          <div className="mx-auto grid max-w-6xl gap-10 px-5 py-12 md:grid-cols-3">
+          <div className="mx-auto grid max-w-[1600px] gap-10 px-5 py-12 md:grid-cols-3">
             <div className="text-white">
               <p className="text-xs font-bold tracking-[0.18em]">VOTRE PORTAIL</p>
               <div className="my-1 h-[2px] w-7 bg-white" />
@@ -583,7 +583,7 @@ export default function PortailRH() {
               </div>
             </div>
           </div>
-          <div className="mx-auto max-w-6xl px-5 pb-8">
+          <div className="mx-auto max-w-[1600px] px-5 pb-8">
             <p className="text-sm text-white/90">CopyrightRH SGCI 2026</p>
           </div>
         </div>
