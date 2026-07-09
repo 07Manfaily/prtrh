@@ -51,6 +51,7 @@ export default function AdminSidebar() {
       <SidebarLink to="/admin/gestionnaires">Gestionnaires</SidebarLink>
       <SidebarLink to="/admin/gestion-portail">Gestion portail</SidebarLink>
       <SidebarLink to="/admin/habilitation">Gestion habilitation</SidebarLink>
+      <SidebarLink to="/admin/bases-de-donnees">Bases de données</SidebarLink>
     </aside>
   )
 }
