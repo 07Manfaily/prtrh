@@ -1,9 +1,10 @@
 import { useState, useMemo } from 'react'
-import { Search, X, Plus, UserCog } from 'lucide-react'
+import { Search, X, Plus, UserCog, SquarePen, Check } from 'lucide-react'
 
 const DARK   = '#161616'
 const RED    = '#E9041E'
 const PURPLE = '#7C3AED'
+const BLUE   = '#2563EB'
 const ROLES  = ['Admin', 'HRBP', 'Gestionnaire']
 
 const INIT_PROFILES = [
@@ -23,9 +24,13 @@ const MOCK_USERS = [
 export default function GestionHabilitation() {
   const [profiles,     setProfiles]     = useState(INIT_PROFILES)
   const [search,       setSearch]       = useState('')
-  const [modal,        setModal]        = useState(null) // null | 'add' | 'delete'
+  const [modal,        setModal]        = useState(null) // null | 'add' | 'edit' | 'delete'
   const [deleteTarget, setDeleteTarget] = useState(null)
   const [feedback,     setFeedback]     = useState(null) // { type, msg }
+
+  /* ── état du modal Modification ── */
+  const [editTarget, setEditTarget] = useState(null)
+  const [editRoles,  setEditRoles]  = useState([])
 
   /* ── état du modal Ajout ── */
   const [addRole,      setAddRole]      = useState('Admin')
@@ -62,9 +67,21 @@ export default function GestionHabilitation() {
     setModal('delete')
   }
 
+  function openEdit(profile) {
+    setEditTarget(profile)
+    setEditRoles(profile.roles)
+    setModal('edit')
+  }
+
+  function toggleEditRole(role) {
+    setEditRoles(r => r.includes(role) ? r.filter(x => x !== role) : [...r, role])
+  }
+
   function closeModal() {
     setModal(null)
     setDeleteTarget(null)
+    setEditTarget(null)
+    setEditRoles([])
   }
 
   function confirmAdd() {
@@ -78,6 +95,13 @@ export default function GestionHabilitation() {
     setProfiles(p => p.filter(x => x.id !== deleteTarget.id))
     closeModal()
     showFeedback('success', 'Profil supprimé avec succès')
+  }
+
+  function confirmEdit() {
+    if (!editRoles.length) return
+    setProfiles(p => p.map(x => x.id === editTarget.id ? { ...x, roles: editRoles } : x))
+    closeModal()
+    showFeedback('success', 'Profil modifié avec succès')
   }
 
   return (
@@ -146,8 +170,14 @@ export default function GestionHabilitation() {
                 </span>
               ))}
               <button
+                onClick={() => openEdit(p)}
+                className="ml-1 text-blue-500 transition-colors hover:text-blue-700"
+              >
+                <SquarePen size={18} />
+              </button>
+              <button
                 onClick={() => openDelete(p)}
-                className="ml-1 text-red-400 transition-colors hover:text-red-600"
+                className="text-red-400 transition-colors hover:text-red-600"
               >
                 <X size={18} />
               </button>
@@ -166,7 +196,7 @@ export default function GestionHabilitation() {
               <div className="flex items-center gap-3">
                 <UserCog size={26} className="text-neutral-500" strokeWidth={1.5} />
                 <h2 className="text-lg font-bold text-neutral-900">
-                  {modal === 'add' ? 'Ajout de profil' : 'Suppression profil'}
+                  {modal === 'add' ? 'Ajout de profil' : modal === 'edit' ? 'Modifier profil' : 'Suppression profil'}
                 </h2>
               </div>
               <button
@@ -267,6 +297,48 @@ export default function GestionHabilitation() {
                         style={{ background: DARK }}
                       >
                         Confirmer
+                      </button>
+                    </div>
+                  </>
+                )}
+
+                {/* ── Modal Modification ── */}
+                {modal === 'edit' && editTarget && (
+                  <>
+                    <p className="mb-3 text-sm font-semibold text-neutral-700">Rôles</p>
+                    <div className="mb-8 flex gap-2">
+                      {ROLES.map(r => {
+                        const active = editRoles.includes(r)
+                        return (
+                          <button
+                            key={r}
+                            onClick={() => toggleEditRole(r)}
+                            className={`flex items-center gap-1.5 rounded-md px-4 py-2 text-sm font-semibold transition-colors ${
+                              active
+                                ? 'bg-neutral-900 text-white'
+                                : 'bg-neutral-100 text-neutral-500 hover:bg-neutral-200'
+                            }`}
+                          >
+                            {r}
+                            {active ? <X size={14} /> : <Check size={14} />}
+                          </button>
+                        )
+                      })}
+                    </div>
+
+                    <div className="mb-8 flex items-center gap-3">
+                      <UserCog size={24} className="text-neutral-500" strokeWidth={1.5} />
+                      <span className="font-semibold text-neutral-900">{editTarget.nom}</span>
+                    </div>
+
+                    <div className="flex justify-end">
+                      <button
+                        onClick={confirmEdit}
+                        disabled={!editRoles.length}
+                        className="rounded-lg px-10 py-3 text-sm font-semibold text-white disabled:opacity-40"
+                        style={{ background: BLUE }}
+                      >
+                        Modifier
                       </button>
                     </div>
                   </>
