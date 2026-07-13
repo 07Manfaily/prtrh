@@ -27,10 +27,10 @@ export const useAuthStore = create(
        *   }
        * },
        */
-      login: async () => {
+      login: async ({ role } = {}) => {
         set({
           token: 'mock-token',
-          user:  { prenom: 'Lambertin', nom: 'Isidorin', role: 'salarie' },
+          user:  { prenom: 'Lambertin', nom: 'Isidorin', role: role === 'admin' ? 'admin' : 'salarie' },
           loading: false,
           error:   null,
         })
