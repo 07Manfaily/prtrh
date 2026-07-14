@@ -5,9 +5,10 @@
  */
 export const ENDPOINTS = {
   auth: {
-    login:  '/auth/login',
-    logout: '/auth/logout',
-    me:     '/auth/me',
+    login:          '/auth/login',
+    logout:         '/auth/logout',
+    me:             '/auth/me',
+    changePassword: '/auth/change-password',
   },
 
   salarie: {

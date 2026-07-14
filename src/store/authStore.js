@@ -39,6 +39,25 @@ export const useAuthStore = create(
       /** MODE DEV — no-op (pas d'API disponible). */
       fetchMe: async () => {},
 
+      /**
+       * MODE DEV — changePassword mock (pas d'appel API).
+       * Pour réactiver le vrai appel, remplacer ce bloc par :
+       *
+       * changePassword: async (data) => {
+       *   set({ loading: true, error: null })
+       *   try {
+       *     await authService.changePassword(data)
+       *     set({ loading: false })
+       *   } catch (err) {
+       *     set({ error: err.message, loading: false })
+       *     throw err
+       *   }
+       * },
+       */
+      changePassword: async () => {
+        set({ loading: false, error: null })
+      },
+
       logout: async () => {
         set({ user: null, token: null })
       },

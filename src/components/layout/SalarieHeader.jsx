@@ -1,6 +1,8 @@
+import { useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
-import { Bell, Settings, HelpCircle, LayoutGrid, CircleUser } from 'lucide-react'
+import { Bell, Settings, HelpCircle, LayoutGrid, Key, CircleUser } from 'lucide-react'
 import { useAuthStore } from '../../store'
+import ChangePasswordModal from './ChangePasswordModal'
 
 const RED = '#E9041E'
 
@@ -8,6 +10,7 @@ export default function SalarieHeader() {
   const navigate = useNavigate()
   const { user, logout } = useAuthStore()
   const fullName = [user?.prenom, user?.nom].filter(Boolean).join(' ') || 'Utilisateur'
+  const [showPwdModal, setShowPwdModal] = useState(false)
 
   const handleLogout = async () => {
     await logout()
@@ -15,6 +18,7 @@ export default function SalarieHeader() {
   }
 
   return (
+    <>
     <header className="flex h-14 shrink-0 items-center justify-between border-b border-neutral-200 bg-white px-6">
       {/* Logo + nav */}
       <div className="flex items-center gap-1">
@@ -71,6 +75,11 @@ export default function SalarieHeader() {
         <Settings  size={20} className="cursor-pointer text-neutral-600 hover:text-neutral-900" />
         <HelpCircle size={20} className="cursor-pointer text-neutral-600 hover:text-neutral-900" />
         <LayoutGrid size={20} className="cursor-pointer text-neutral-600 hover:text-neutral-900" />
+        <Key
+          size={20}
+          className="cursor-pointer text-neutral-600 hover:text-neutral-900"
+          onClick={() => setShowPwdModal(true)}
+        />
 
         <div className="flex items-center gap-2">
           <CircleUser size={28} className="text-neutral-600" />
@@ -86,5 +95,8 @@ export default function SalarieHeader() {
         </div>
       </div>
     </header>
+
+    {showPwdModal && <ChangePasswordModal onClose={() => setShowPwdModal(false)} />}
+    </>
   )
 }
