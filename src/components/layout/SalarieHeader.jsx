@@ -10,7 +10,9 @@ export default function SalarieHeader() {
   const navigate = useNavigate()
   const { user, logout } = useAuthStore()
   const fullName = [user?.prenom, user?.nom].filter(Boolean).join(' ') || 'Utilisateur'
-  const [showPwdModal, setShowPwdModal] = useState(false)
+  const mustChangePassword = !!user?.must_change_password
+  // ouvre automatiquement le popup si la connexion nécessite un changement de mot de passe
+  const [showPwdModal, setShowPwdModal] = useState(() => mustChangePassword)
 
   const handleLogout = async () => {
     await logout()
@@ -96,7 +98,12 @@ export default function SalarieHeader() {
       </div>
     </header>
 
-    {showPwdModal && <ChangePasswordModal onClose={() => setShowPwdModal(false)} />}
+    {showPwdModal && (
+      <ChangePasswordModal
+        mandatory={mustChangePassword}
+        onClose={() => setShowPwdModal(false)}
+      />
+    )}
     </>
   )
 }

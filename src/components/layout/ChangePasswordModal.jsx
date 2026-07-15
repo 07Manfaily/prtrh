@@ -4,7 +4,7 @@ import { useAuthStore } from '../../store'
 
 const DARK = '#161616'
 
-export default function ChangePasswordModal({ onClose }) {
+export default function ChangePasswordModal({ onClose, mandatory = false }) {
   const { changePassword, loading } = useAuthStore()
   const [newPassword,     setNewPassword]     = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -42,18 +42,35 @@ export default function ChangePasswordModal({ onClose }) {
             <Key size={22} className="text-neutral-500" strokeWidth={1.5} />
             <h2 className="text-lg font-bold text-neutral-900">Modifier le mot de passe</h2>
           </div>
-          <button
-            onClick={onClose}
-            className="rounded-lg border border-neutral-300 px-4 py-1.5 text-sm font-medium hover:bg-neutral-50"
-          >
-            Fermer
-          </button>
+          {!mandatory && (
+            <button
+              onClick={onClose}
+              className="rounded-lg border border-neutral-300 px-4 py-1.5 text-sm font-medium hover:bg-neutral-50"
+            >
+              Fermer
+            </button>
+          )}
         </div>
 
         <div className="px-6 pb-6">
+          {mandatory && !success && (
+            <p className="mb-4 text-sm text-neutral-600">
+              Pour des raisons de sécurité, vous devez définir un nouveau mot de passe avant de continuer.
+            </p>
+          )}
+
           {success ? (
-            <div className="rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
-              Mot de passe modifié avec succès.
+            <div className="space-y-4">
+              <div className="rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
+                Mot de passe modifié avec succès.
+              </div>
+              <button
+                onClick={onClose}
+                className="w-full rounded-lg py-3 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+                style={{ background: DARK }}
+              >
+                Continuer
+              </button>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">

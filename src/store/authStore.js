@@ -30,7 +30,12 @@ export const useAuthStore = create(
       login: async ({ role } = {}) => {
         set({
           token: 'mock-token',
-          user:  { prenom: 'Lambertin', nom: 'Isidorin', role: role === 'admin' ? 'admin' : 'salarie' },
+          user:  {
+            prenom: 'Lambertin',
+            nom:    'Isidorin',
+            role:   role === 'admin' ? 'admin' : 'salarie',
+            must_change_password: false,
+          },
           loading: false,
           error:   null,
         })
@@ -47,7 +52,10 @@ export const useAuthStore = create(
        *   set({ loading: true, error: null })
        *   try {
        *     await authService.changePassword(data)
-       *     set({ loading: false })
+       *     set((state) => ({
+       *       user: state.user ? { ...state.user, must_change_password: false } : state.user,
+       *       loading: false,
+       *     }))
        *   } catch (err) {
        *     set({ error: err.message, loading: false })
        *     throw err
@@ -55,7 +63,11 @@ export const useAuthStore = create(
        * },
        */
       changePassword: async () => {
-        set({ loading: false, error: null })
+        set((state) => ({
+          user: state.user ? { ...state.user, must_change_password: false } : state.user,
+          loading: false,
+          error:   null,
+        }))
       },
 
       logout: async () => {
