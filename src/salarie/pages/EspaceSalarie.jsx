@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { FileText, ChevronRight, ArrowUpLeft, ArrowUpRight, AlertCircle, Medal } from 'lucide-react'
+import { useState, useRef } from 'react'
+import { FileText, ChevronRight, ArrowUpLeft, ArrowUpRight, AlertCircle, Medal, Download } from 'lucide-react'
 
 const RED = '#E9041E'
 const DARK = '#161616'
@@ -493,84 +493,6 @@ const MOCK_AT = {
   dateFait: '30 septembre 2025',
 }
 
-function printAttestation() {
-  const win = window.open('', '_blank', 'width=820,height=1100')
-  win.document.write(`<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8"/>
-  <title>Attestation de Travail — SGCI</title>
-  <style>
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family: Arial, sans-serif; font-size: 11.5pt; color: #111; padding: 45px 65px; line-height: 1.75; }
-    .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 36px; padding-bottom: 18px; border-bottom: 3px solid #E9041E; }
-    .company-name { font-size: 14pt; font-weight: bold; color: #E9041E; letter-spacing: 1px; }
-    .company-addr { font-size: 8.5pt; color: #555; margin-top: 4px; }
-    .header-right { text-align: right; font-size: 9pt; color: #444; }
-    .title-wrap { text-align: center; margin: 44px 0 40px; }
-    .title { display: inline-block; font-size: 15pt; font-weight: bold; text-decoration: underline; letter-spacing: 2.5px; }
-    .body { margin: 0 0 28px; text-align: justify; }
-    .body p { margin-bottom: 20px; }
-    b { font-weight: bold; }
-    .cnps { margin: 28px 0; font-size: 10pt; }
-    .cnps p { margin-bottom: 5px; }
-    .lieu { margin-top: 24px; }
-    .sign { margin-top: 52px; display: flex; justify-content: flex-end; }
-    .sign-box { text-align: center; width: 210px; }
-    .sign-label { font-size: 9pt; color: #555; margin-bottom: 56px; }
-    .sign-line { border-bottom: 1px solid #bbb; width: 160px; margin: 0 auto 8px; }
-    .sign-name { font-weight: bold; font-size: 10pt; }
-    .sign-title { font-size: 8.5pt; color: #555; }
-    .footer { margin-top: 64px; padding-top: 14px; border-top: 1px solid #ccc; font-size: 7.5pt; color: #888; text-align: center; line-height: 1.6; }
-    @page { margin: 1.5cm 1.2cm; }
-    @media print { body { padding: 0; } }
-  </style>
-</head>
-<body>
-  <div class="header">
-    <div>
-      <div class="company-name">SOCIÉTÉ GÉNÉRALE CÔTE D'IVOIRE</div>
-      <div class="company-addr">Siège Social : 5 et 7, avenue Joseph ANOMA — Plateau, ABIDJAN<br/>01 BP 1355 Abidjan 01</div>
-    </div>
-    <div class="header-right">Abidjan, le ${MOCK_AT.dateFait}</div>
-  </div>
-
-  <div class="title-wrap">
-    <span class="title">ATTESTATION DE TRAVAIL</span>
-  </div>
-
-  <div class="body">
-    <p>Nous soussignés, <b>SOCIÉTÉ GÉNÉRALE CÔTE D'IVOIRE</b> à ABIDJAN, Siège Social 5 et 7 avenue Joseph ANOMA, attestons que Monsieur <b>${MOCK_AT.nom}</b>, ${MOCK_AT.titre}, <b>${MOCK_AT.echelon}</b> est employé dans notre Établissement depuis le <b>${MOCK_AT.dateDebut}</b> et exerce en qualité de <b>${MOCK_AT.poste}</b>.</p>
-    <p>En foi de quoi, nous lui délivrons la présente attestation pour servir et valoir ce que de droit.</p>
-  </div>
-
-  <div class="cnps">
-    <p>N° de l'Employeur à la CNPS&nbsp;: <b>${MOCK_AT.noEmployeurCNPS}</b></p>
-    <p>N° de l'Employé à la CNPS&nbsp;&nbsp;&nbsp;: <b>${MOCK_AT.noEmployeCNPS}</b></p>
-  </div>
-
-  <p class="lieu">Fait à Abidjan, le <b>${MOCK_AT.dateFait}</b></p>
-
-  <div class="sign">
-    <div class="sign-box">
-      <p class="sign-label">La Direction des Ressources Humaines</p>
-      <div class="sign-line"></div>
-      <p class="sign-name">DRH</p>
-      <p class="sign-title">Directeur des Ressources Humaines</p>
-    </div>
-  </div>
-
-  <div class="footer">
-    Société Générale Côte d'Ivoire — Siège Social : 5 et 7, avenue Joseph ANOMA — 01 BP 1355 Abidjan 01<br/>
-    Tél : (+225) 27 20 20 12 34 — Fax : (+225) 27 20 20 18 00 — www.sgci.societegenerale.com<br/>
-    S.A. au capital de 23 489 164 500 F CFA — RCCM : CI-ABJ-2000-B-33099 — N° CC : 0103090 T
-  </div>
-</body>
-</html>`)
-  win.document.close()
-  setTimeout(() => { win.print() }, 600)
-}
-
 /* ── Attestation de congé — données mock ── */
 const MOCK_AC = {
   nom: 'MOUAHA HANDY YVES',
@@ -585,101 +507,35 @@ const MOCK_AC = {
   dateFait: '31 juillet 2025',
 }
 
-function printAttestationConge() {
-  const win = window.open('', '_blank', 'width=820,height=1100')
-  win.document.write(`<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8"/>
-  <title>Attestation de Congé — SGCI</title>
-  <style>
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family: Arial, sans-serif; font-size: 11.5pt; color: #111; padding: 45px 65px; line-height: 1.75; }
-    .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 36px; padding-bottom: 18px; border-bottom: 3px solid #E9041E; }
-    .company-name { font-size: 14pt; font-weight: bold; color: #E9041E; letter-spacing: 1px; }
-    .company-addr { font-size: 8.5pt; color: #555; margin-top: 4px; }
-    .header-right { text-align: right; font-size: 9pt; color: #444; }
-    .title-wrap { text-align: center; margin: 44px 0 40px; }
-    .title { display: inline-block; font-size: 15pt; font-weight: bold; text-decoration: underline; letter-spacing: 2.5px; }
-    .body { margin: 0 0 28px; text-align: justify; }
-    .body p { margin-bottom: 20px; }
-    b { font-weight: bold; }
-    table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 10.5pt; }
-    td { padding: 8px 12px; border: 1px solid #ccc; vertical-align: top; }
-    td:first-child { background: #f5f5f5; font-weight: bold; width: 42%; }
-    .cnps { margin: 28px 0; font-size: 10pt; }
-    .cnps p { margin-bottom: 5px; }
-    .lieu { margin-top: 24px; }
-    .sign { margin-top: 52px; display: flex; justify-content: flex-end; }
-    .sign-box { text-align: center; width: 210px; }
-    .sign-label { font-size: 9pt; color: #555; margin-bottom: 56px; }
-    .sign-line { border-bottom: 1px solid #bbb; width: 160px; margin: 0 auto 8px; }
-    .sign-name { font-weight: bold; font-size: 10pt; }
-    .sign-title { font-size: 8.5pt; color: #555; }
-    .footer { margin-top: 64px; padding-top: 14px; border-top: 1px solid #ccc; font-size: 7.5pt; color: #888; text-align: center; line-height: 1.6; }
-    @page { margin: 1.5cm 1.2cm; }
-    @media print { body { padding: 0; } }
-  </style>
-</head>
-<body>
-  <div class="header">
-    <div>
-      <div class="company-name">SOCIÉTÉ GÉNÉRALE CÔTE D'IVOIRE</div>
-      <div class="company-addr">Siège Social : 5 et 7, avenue Joseph ANOMA — Plateau, ABIDJAN<br/>01 BP 1355 Abidjan 01</div>
-    </div>
-    <div class="header-right">Abidjan, le ${MOCK_AC.dateFait}</div>
-  </div>
-
-  <div class="title-wrap">
-    <span class="title">ATTESTATION DE CONGÉ</span>
-  </div>
-
-  <div class="body">
-    <p>Nous soussignés, <b>SOCIÉTÉ GÉNÉRALE CÔTE D'IVOIRE</b> à ABIDJAN, Siège Social 5 et 7 avenue Joseph ANOMA, certifions que Monsieur <b>${MOCK_AC.nom}</b>, ${MOCK_AC.categorie}, exerçant la fonction de <b>${MOCK_AC.poste}</b> au sein de notre Établissement, a bénéficié d'un congé annuel payé dans les conditions suivantes :</p>
-  </div>
-
-  <table>
-    <tr><td>Période de congé</td><td>Du <b>${MOCK_AC.dateDebutConge}</b> au <b>${MOCK_AC.dateFinConge}</b></td></tr>
-    <tr><td>Durée</td><td><b>${MOCK_AC.nbJours}</b></td></tr>
-    <tr><td>Date de reprise</td><td><b>${MOCK_AC.dateReprise}</b></td></tr>
-  </table>
-
-  <div class="body">
-    <p>En foi de quoi, nous lui délivrons la présente attestation pour servir et valoir ce que de droit.</p>
-  </div>
-
-  <div class="cnps">
-    <p>N° de l'Employeur à la CNPS&nbsp;: <b>${MOCK_AC.noEmployeurCNPS}</b></p>
-    <p>N° de l'Employé à la CNPS&nbsp;&nbsp;&nbsp;: <b>${MOCK_AC.noEmployeCNPS}</b></p>
-  </div>
-
-  <p class="lieu">Fait à Abidjan, le <b>${MOCK_AC.dateFait}</b></p>
-
-  <div class="sign">
-    <div class="sign-box">
-      <p class="sign-label">La Direction des Ressources Humaines</p>
-      <div class="sign-line"></div>
-      <p class="sign-name">DRH</p>
-      <p class="sign-title">Directeur des Ressources Humaines</p>
-    </div>
-  </div>
-
-  <div class="footer">
-    Société Générale Côte d'Ivoire — Siège Social : 5 et 7, avenue Joseph ANOMA — 01 BP 1355 Abidjan 01<br/>
-    Tél : (+225) 27 20 20 12 34 — Fax : (+225) 27 20 20 18 00 — www.sgci.societegenerale.com<br/>
-    S.A. au capital de 23 489 164 500 F CFA — RCCM : CI-ABJ-2000-B-33099 — N° CC : 0103090 T
-  </div>
-</body>
-</html>`)
-  win.document.close()
-  setTimeout(() => { win.print() }, 600)
-}
-
 /* ── Modal ── */
 function Modal({ modal, setModal, luCheck, setLuCheck }) {
   const close = () => setModal(null)
   const itemId = modal.data?.id
   const isLu = luCheck[itemId]
+  const attestationRef = useRef(null)
+
+  const handleDownloadAttestation = async () => {
+    const filename = modal.data?.itemType === 'conge'
+      ? 'Attestation_de_Conge_SGCI.pdf'
+      : 'Attestation_de_Travail_SGCI.pdf'
+
+    const [{ default: html2canvas }, { default: jsPDF }] = await Promise.all([
+      import('html2canvas-pro'),
+      import('jspdf'),
+    ])
+
+    const canvas = await html2canvas(attestationRef.current, { scale: 2 })
+    const imgData = canvas.toDataURL('image/jpeg', 0.98)
+
+    const pdf = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' })
+    const margin = 10
+    const pageWidth  = pdf.internal.pageSize.getWidth()  - margin * 2
+    const pageHeight = pdf.internal.pageSize.getHeight() - margin * 2
+    const imgHeight  = Math.min((canvas.height * pageWidth) / canvas.width, pageHeight)
+
+    pdf.addImage(imgData, 'JPEG', margin, margin, pageWidth, imgHeight)
+    pdf.save(filename)
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
@@ -698,7 +554,7 @@ function Modal({ modal, setModal, luCheck, setLuCheck }) {
             </div>
 
             <div className="flex-1 overflow-y-auto p-5">
-              <div className="rounded border border-neutral-200 bg-white p-8 text-sm leading-7 text-neutral-800 shadow-sm">
+              <div ref={attestationRef} className="rounded border border-neutral-200 bg-white p-8 text-sm leading-7 text-neutral-800 shadow-sm">
 
                 {/* En-tête commun */}
                 <div className="mb-6 flex items-start justify-between border-b-2 pb-5" style={{ borderColor: RED }}>
@@ -795,11 +651,12 @@ function Modal({ modal, setModal, luCheck, setLuCheck }) {
 
             <div className="flex items-center justify-end gap-3 border-t border-neutral-100 p-4">
               <button
-                onClick={modal.data.itemType === 'conge' ? printAttestationConge : printAttestation}
-                className="rounded-md px-4 py-2 text-sm font-semibold text-white"
+                onClick={handleDownloadAttestation}
+                className="flex items-center gap-2 rounded-md px-4 py-2 text-sm font-semibold text-white"
                 style={{ background: TEAL }}
               >
-                Télécharger / Imprimer
+                <Download size={16} />
+                Télécharger
               </button>
               <button onClick={close} className="rounded-md border border-neutral-300 px-6 py-2 text-sm font-medium hover:bg-neutral-50">Fermer</button>
             </div>

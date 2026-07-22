@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { Search, X, Plus, UserCog, SquarePen, Check } from 'lucide-react'
+import { Search, X, Plus, UserCog, SquarePen, Check, Key, Copy } from 'lucide-react'
 
 const DARK   = '#161616'
 const RED    = '#E9041E'
@@ -8,10 +8,10 @@ const BLUE   = '#2563EB'
 const ROLES  = ['Admin', 'HRBP', 'Gestionnaire']
 
 const INIT_PROFILES = [
-  { id: 1, nom: 'Koné Mohamed',     roles: ['Admin'] },
-  { id: 2, nom: 'Konan Lionel',     roles: ['Admin'] },
-  { id: 3, nom: 'Allou Mariette',   roles: ['Admin', 'HRBP'] },
-  { id: 4, nom: 'Jean Yves Vangah', roles: ['Admin'] },
+  { id: 1, nom: 'Koné Mohamed',     matricule: '4701', roles: ['Admin'] },
+  { id: 2, nom: 'Konan Lionel',     matricule: '4712', roles: ['Admin'] },
+  { id: 3, nom: 'Allou Mariette',   matricule: '4723', roles: ['Admin', 'HRBP'] },
+  { id: 4, nom: 'Jean Yves Vangah', matricule: '4734', roles: ['Admin'] },
 ]
 
 const MOCK_USERS = [
@@ -24,13 +24,18 @@ const MOCK_USERS = [
 export default function GestionHabilitation() {
   const [profiles,     setProfiles]     = useState(INIT_PROFILES)
   const [search,       setSearch]       = useState('')
-  const [modal,        setModal]        = useState(null) // null | 'add' | 'edit' | 'delete'
+  const [modal,        setModal]        = useState(null) // null | 'add' | 'edit' | 'delete' | 'reset'
   const [deleteTarget, setDeleteTarget] = useState(null)
   const [feedback,     setFeedback]     = useState(null) // { type, msg }
 
   /* ── état du modal Modification ── */
   const [editTarget, setEditTarget] = useState(null)
   const [editRoles,  setEditRoles]  = useState([])
+
+  /* ── état du modal Réinitialisation mot de passe ── */
+  const [resetTarget,   setResetTarget]   = useState(null)
+  const [resetPassword, setResetPassword] = useState(null)
+  const [copied,        setCopied]        = useState(false)
 
   /* ── état du modal Ajout ── */
   const [addRole,      setAddRole]      = useState('Admin')
@@ -77,16 +82,26 @@ export default function GestionHabilitation() {
     setEditRoles(r => r.includes(role) ? r.filter(x => x !== role) : [...r, role])
   }
 
+  function openReset(profile) {
+    setResetTarget(profile)
+    setResetPassword(null)
+    setCopied(false)
+    setModal('reset')
+  }
+
   function closeModal() {
     setModal(null)
     setDeleteTarget(null)
     setEditTarget(null)
     setEditRoles([])
+    setResetTarget(null)
+    setResetPassword(null)
+    setCopied(false)
   }
 
   function confirmAdd() {
     if (!addSelected) return
-    setProfiles(p => [...p, { id: Date.now(), nom: addSelected.nom, roles: [addRole] }])
+    setProfiles(p => [...p, { id: Date.now(), nom: addSelected.nom, matricule: addSelected.matricule, roles: [addRole] }])
     closeModal()
     showFeedback('success', 'Profil ajouté avec succès')
   }
@@ -102,6 +117,16 @@ export default function GestionHabilitation() {
     setProfiles(p => p.map(x => x.id === editTarget.id ? { ...x, roles: editRoles } : x))
     closeModal()
     showFeedback('success', 'Profil modifié avec succès')
+  }
+
+  function confirmReset() {
+    setResetPassword(`${resetTarget.matricule}_pass`)
+  }
+
+  function handleCopyPassword() {
+    navigator.clipboard.writeText(resetPassword)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
   }
 
   return (
@@ -176,6 +201,13 @@ export default function GestionHabilitation() {
                 <SquarePen size={18} />
               </button>
               <button
+                onClick={() => openReset(p)}
+                className="text-purple-500 transition-colors hover:text-purple-700"
+                title="Réinitialiser le mot de passe"
+              >
+                <Key size={18} />
+              </button>
+              <button
                 onClick={() => openDelete(p)}
                 className="text-red-400 transition-colors hover:text-red-600"
               >
@@ -194,9 +226,14 @@ export default function GestionHabilitation() {
             {/* Header */}
             <div className="flex items-center justify-between px-6 py-5">
               <div className="flex items-center gap-3">
-                <UserCog size={26} className="text-neutral-500" strokeWidth={1.5} />
+                {modal === 'reset'
+                  ? <Key size={26} className="text-neutral-500" strokeWidth={1.5} />
+                  : <UserCog size={26} className="text-neutral-500" strokeWidth={1.5} />}
                 <h2 className="text-lg font-bold text-neutral-900">
-                  {modal === 'add' ? 'Ajout de profil' : modal === 'edit' ? 'Modifier profil' : 'Suppression profil'}
+                  {modal === 'add' ? 'Ajout de profil'
+                    : modal === 'edit' ? 'Modifier profil'
+                    : modal === 'reset' ? 'Réinitialiser le mot de passe'
+                    : 'Suppression profil'}
                 </h2>
               </div>
               <button
@@ -377,6 +414,57 @@ export default function GestionHabilitation() {
                         Supprimer
                       </button>
                     </div>
+                  </>
+                )}
+
+                {/* ── Modal Réinitialisation mot de passe ── */}
+                {modal === 'reset' && resetTarget && (
+                  <>
+                    <div className="mb-8 flex items-center gap-3">
+                      <UserCog size={24} className="text-neutral-500" strokeWidth={1.5} />
+                      <div>
+                        <p className="font-semibold text-neutral-900">{resetTarget.nom}</p>
+                        <p className="text-xs text-neutral-400">Matricule : {resetTarget.matricule}</p>
+                      </div>
+                    </div>
+
+                    {!resetPassword ? (
+                      <>
+                        <p className="mb-8 text-center text-sm text-neutral-600">
+                          Voulez-vous réinitialiser le mot de passe de <strong>{resetTarget.nom}</strong> ?
+                        </p>
+                        <div className="flex justify-center">
+                          <button
+                            onClick={confirmReset}
+                            className="rounded-lg px-10 py-3 text-sm font-semibold text-white"
+                            style={{ background: PURPLE }}
+                          >
+                            Réinitialiser
+                          </button>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="mb-5 flex items-center gap-2 rounded-lg bg-green-50 px-4 py-3 text-sm font-medium text-green-700">
+                          <Check size={16} />
+                          Mot de passe réinitialisé avec succès
+                        </div>
+
+                        <p className="mb-2 text-sm font-semibold text-neutral-700">Nouveau mot de passe</p>
+                        <div className="flex items-center gap-2">
+                          <div className="flex-1 rounded-lg border border-neutral-200 bg-neutral-50 px-4 py-3 font-mono text-sm text-neutral-900">
+                            {resetPassword}
+                          </div>
+                          <button
+                            onClick={handleCopyPassword}
+                            className="flex items-center gap-2 rounded-lg border border-neutral-300 px-4 py-3 text-sm font-medium hover:bg-neutral-50"
+                          >
+                            {copied ? <Check size={16} className="text-green-600" /> : <Copy size={16} />}
+                            {copied ? 'Copié' : 'Copier'}
+                          </button>
+                        </div>
+                      </>
+                    )}
                   </>
                 )}
 
