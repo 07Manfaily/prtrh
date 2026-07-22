@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { useAuthStore } from '../store'
 
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL ?? 'http://localhost:3000/api',
@@ -16,12 +17,12 @@ api.interceptors.request.use((config) => {
   return config
 })
 
-// 401 → on vide la session et on redirige
+// 401 (token invalide/expiré) → déconnexion automatique via le store, puis redirection
 api.interceptors.response.use(
   (res) => res.data,
   (err) => {
-    if (err.response?.status === 401) {
-      localStorage.removeItem('portail-rh-auth')
+    if (err.response?.status === 401 && useAuthStore.getState().token) {
+      useAuthStore.getState().logout()
       window.location.href = '/login'
     }
     return Promise.reject(new Error(err.response?.data?.message ?? err.message))
